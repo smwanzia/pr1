@@ -1,0 +1,90 @@
+
+
+  <!-- sidebar -->
+        <div class="sidebar app-aside" id="sidebar">
+            <div class="sidebar-container perfect-scrollbar">
+                <nav>
+                    <div class="navbar-title">
+                        <span> Navigation</span>
+                    </div>
+                    <ul class="main-navigation-menu">
+                        <li class="active open">
+                            <a href="index.jsp">
+                                <div class="item-content">
+                                    <div class="item-media">
+                                        <i class="fa fa-home"></i>
+                                    </div>
+                                    <div class="item-inner ">
+                                        <span class="title text-bold">Back Home</span><i class="fa fa-arrow-left pull-right"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="active open">
+                            <a href="Applicant_profile.jsp">
+                                <div class="item-content">
+                                    <div class="item-media">
+                                        <i class="fa fa-pencil"></i>
+                                    </div>
+                                    <div class="item-inner">
+                                        <span class="title text-bold">Update Your Profile</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="active open">
+                            <a href="#">
+                                <div class="item-content">
+                                    <div class="item-media">
+                                        <i class="fa fa-upload"></i>
+                                    </div>
+                                    <div class="item-inner">
+                                        <span class="title text-bold">Upload Additional Document
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                       
+                        <li class="active open">
+                            <a href="#">
+                                <div class="item-content">
+                                    <div class="item-media">
+                                        <i class="fa fa-money"></i>
+                                    </div>
+                                    <div class="item-inner fa-hover">
+                                        <span class="title text-bold"> Application Instructions
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                      
+                        <li  class="active open">
+                            <a href="#">
+                                <div class="item-content">
+                                    <div class="item-media">
+                                        <i class="fa fa-map-marker"></i>
+                                    </div>
+                                    <div class="item-inner">
+                                        <span class="title text-bold">Apply for Admission</span>
+
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li  class="active open">
+                            <a href="logout">
+                                <div class="item-content">
+                                    <div class="item-media">
+                                        <i class="fa fa-lock"></i>
+                                    </div>
+                                    <div class="item-inner">
+                                        <span class="title text-bold">LogOut</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                       
+                    </ul>
+                </nav>
+            </div>
+        </div>

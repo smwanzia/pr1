@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context antiJARLocking="true" path="/CourseApp">
+ <Resource name="jdbc/coursemanager" auth="Container"
+              maxActive="100" 
+              maxIdle="60" 
+              minIdle="5"
+              maxWait="10000"
+              username="root" password="degraP@55w0rd"
+              driverClassName="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://localhost:3306/coursemanager?autoReconnect=true"
+              logAbandoned="true"
+              removeAbandoned="true"
+              removeAbandonedTimeout="1800"
+              removeAbondonedMaintenance="true"
+              timeBetweenEvictionTimeRunsMillis="65000"
+              minEvictableIdleTimeMillis="60000"
+              validationQuery="SELECT 1"
+              validationInterval="60000"
+              type="javax.sql.DataSource"
+              initialSize="10"
+              factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+              testWhileIdle="true"
+/>
+
+</Context>
+
+
+

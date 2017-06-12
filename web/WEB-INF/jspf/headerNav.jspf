@@ -1,0 +1,73 @@
+
+  <!-- start: TOP NAVBAR -->
+            <header class="navbar navbar-default navbar-static-top">
+                <!-- start: NAVBAR HEADER -->
+                <div class="navbar-header">
+                    <a href="#" class="sidebar-mobile-toggler pull-left hidden-md hidden-lg" class="btn btn-navbar sidebar-toggle" data-toggle-class="app-slide-off" data-toggle-target="#app" data-toggle-click-outside="#sidebar">
+                        <i class="ti-align-justify"></i>
+                    </a>
+                    <a class="navbar-default" href="#">
+                       
+                    </a>
+                    <a href="#" class="sidebar-toggler pull-right visible-md visible-lg" data-toggle-class="app-sidebar-closed" data-toggle-target="#app">
+                        <i class="ti-align-justify"></i>
+                    </a>
+                   <!-- <a class="pull-right menu-toggler visible-xs-block" id="menu-toggler" data-toggle="collapse" href=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <i class="ti-view-grid"></i>-->
+                    </a>
+                </div>
+                <!-- end: NAVBAR HEADER -->
+                <!-- start: NAVBAR COLLAPSE -->
+                
+               
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#">
+                                <span class="badge" id="approval_notifications"></span> <i class="fa fa-check"></i> <span>Emails</span>
+                            </a>
+                        </li>
+                      
+                        <li class="dropdown">
+                            <a href class="dropdown-toggle" data-toggle="dropdown">
+                                <span class="badge" id="system_notifications"></span> <i class="fa fa-bell-o"></i> <span>NOTIFICATIONS</span>
+                            </a>
+                        </li>
+                        <li class="dropdown">
+                            <a href ="SmsManager" class="dropdown-toggle">
+                                <span class="badge" id="incoming_sms_notifications"></span><i class="fa fa-comment-o"></i> <span>MESSAGES</span>
+                            </a>
+                        </li>
+                        <li class="dropdown current-user">
+                            <a href class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="images/default-user.png" class="img-circle" alt="${admin.name}"> <span class="username">${admin.name}<i class="fa fa-angle-down fa-4x"></i></span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-dark">
+                                <li>
+                                    <a href="#">
+                                        My Profile
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="pages_calendar.html">
+                                        Change Password
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="lock_screen.jsp">
+                                        Lock Screen
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="AdminLogout">
+                                        Log Out
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- end: USER OPTIONS DROPDOWN -->
+                    </ul>
+                    <!-- end: MENU TOGGLER FOR MOBILE DEVICES -->
+                </div>
+            </header>
