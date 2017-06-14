@@ -6,9 +6,13 @@
 package controler;
 
 import Data.CourseDB;
+import business.Courses;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.util.Iterator;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -29,24 +33,20 @@ public class deleteCourses extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-        response.setContentType("application/json");
+        // response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-
-        String id = request.getParameter("id");
-
-        JSONObject jsonObj = new JSONObject();
-        Iterator it = jsonObj.keys(); //get all the keys
-        while (it.hasNext()) {
-            String key = (String) it.next(); // get key
-            Object o = jsonObj.get(key); // get value
-            System.out.println(key + " : " + o); // print the key and value
-            response.getWriter().write(key + ":" + o);
-
-        }
+        int id = Integer.parseInt(request.getParameter("id"));
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        //Courses course;
+        //course.setCourseId(id);
+        // System.out.print(gson.toJson(null));
         int i = CourseDB.DeleteCourses(id);
         if (i > 0) {
+            response.setContentType("text/html");
             response.getWriter().write("success");
         } else {
+            response.setContentType("text/html");
             response.getWriter().write("error");
         }
     }

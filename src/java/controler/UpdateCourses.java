@@ -5,8 +5,8 @@
  */
 package controler;
 
-import Data.SchoolDB;
-import business.Schools;
+import Data.CourseDB;
+import business.Courses;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author xmore mmohz
  */
-public class AddSchools extends HttpServlet {
+public class UpdateCourses extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -30,38 +30,35 @@ public class AddSchools extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String message = "";
-        String url = "";
         HttpSession session = request.getSession();
-
-        String schoolId = request.getParameter("schoolId");
-        String schoolName = request.getParameter("schoolName");
+String courseid=request.getParameter("id");
+        String coursename = request.getParameter("coursename");
+        String schoolId = request.getParameter("schoolid");
+        String campusId = request.getParameter("campusid");
+        String categoryId = request.getParameter("courseType");
+        String departmentId = request.getParameter("department");
         String description = request.getParameter("description");
-        String campusId = request.getParameter("campusId");
-        
+        String duration = request.getParameter("duration");
 
-        Schools sc = new Schools();
-        sc.setCampusId(campusId);
-        sc.setDescription(description);
-        sc.setSchoolname(schoolName);
-        sc.setSchoolid(schoolId);
+        Courses course = new Courses();
+       
 
-        //AdminDb.AddSchool(sc);
-        int i = SchoolDB.AddSchoolsDetails(sc);
-        if (i > 0) {
+        course.setCampusId(campusId);
+        course.setCategoryId(categoryId);
+        course.setDepartmentId(departmentId);
+        course.setSchoolId(schoolId);
+        course.setCoursename(coursename);
+        course.setDescription(description);
+
+        int i = CourseDB.UpdateCourses(course, duration);
+        if (i == 1) {
             response.setContentType("text/html");
-            response.setContentType("");
+            response.setCharacterEncoding("UTF-8");
             response.getWriter().write("success");
-            //url = "/view_school.jsp";
-            //message = "details successfully sucessfull added";
-            //session.setAttribute("msg", message);
         } else {
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write("Error");
-            //url = "/view_school.jsp";
-            //message = "details successfully sucessfull added";
-            //request.setAttribute("msg", message);
         }
     }
 

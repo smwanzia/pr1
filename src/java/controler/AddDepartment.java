@@ -33,8 +33,8 @@ public class AddDepartment extends HttpServlet {
         String message = "";
         String url = "";
         HttpSession session = request.getSession();
-        String departmentId = request.getParameter("deptId");
-        String departmentName = request.getParameter("deptname");
+        String departmentId = request.getParameter("departmentId");
+        String departmentName = request.getParameter("departmentname");
         String description = request.getParameter("description");
         String facultyId = request.getParameter("facultyId");
 

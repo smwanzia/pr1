@@ -32,7 +32,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>programs</title>
         <jsp:include page="/WEB-INF/jspf/quick_Links.jsp"></jsp:include>
-         <link href="js/css/jquey.css" rel="stylesheet" type="text/css" />
+            <link href="js/css/jquey.css" rel="stylesheet" type="text/css" />
             <link href="vendor/DataTables/css/DT_bootstrap.css" rel="stylesheet" media="screen">
             <script src="js/jquery/jquery-confirm.min.css"></script>
         </head>
@@ -109,7 +109,7 @@
                                             <!--all save buttons-->
 
 
-                                            <button type="button" onclick="AddSchoolDetails()" id="save_school_button" style="display:none" class="btn btn-o  btn-primary btn-sm  glyphicon glyphicon-save">Save</button>
+                                            <button type="button" onclick="" id="save_school_button" style="display:none" class="btn btn-o  btn-primary btn-sm  glyphicon glyphicon-save">Save</button>
 
                                             <!--start all delete buttons-->
 
@@ -164,17 +164,17 @@
 
                                     <fieldset>
                                         <legend>Add Schools Info</legend>
-                                        <form id="school_form">
+                                        <form id="faculty_form"  method="POST" action="">
                                             <div class="row col-md-offset-0">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="camp_id">
                                                             Campus ID
                                                         </label>
-                                                        <select class="form-control cs-select" id="camp_id" name="campusId">
+                                                        <select class="form-control selected" id="camp_id" name="campusId">
                                                             <option>select campus id</option>
-                                                            <c:forEach var="item" items="${campus.rows}" >
-                                                                <option>${item.campus_id}</option>
+                                                            <c:forEach var="item" items="${camp.rows}" >
+                                                                <option value="${item.campus_id}">${item.campus_name}</option>
                                                             </c:forEach>
 
                                                         </select>
@@ -216,12 +216,13 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!--<div class="col-sm-8 col-sm-offset-1">
+                                            <div class="col-sm-8 col-sm-offset-1">
                                                 <div class="form-group">
-                                                    <button type="button" onclick="AddSchoolDetails()" id="school_button" class="btn  btn-primary btn-sm pull-right">Submit</button>
+                                                    <button type="submit"  id="submit_faculty_button" class="btn  btn-primary btn-sm pull-right">Submit</button>
 
                                                 </div>
-                                            </div>-->
+                                            </div>
+
                                         </form>
                                     </fieldset>
                                 </div>
@@ -309,9 +310,13 @@
                                                             <label>
                                                                 Faculty Id 
                                                             </label>
-                                                            <span class="input-icon">
-                                                                <input type="text" id="faculty_id" class="form-control" placeholder="falculty id" name="facultyid">
-                                                            </span>
+                                                            <select class="form-control selected" name="facultyId" id="faculty_id">
+
+                                                                <c:forEach var="result" items="${school.rows}">
+                                                                    <option value="${result.school_id}">${result.school_name}</option>
+                                                                </c:forEach>
+                                                            </select>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -392,7 +397,7 @@
                                                     <label>
                                                         Campus Description
                                                     </label>
-                                                       <span class="input-icon">
+                                                    <span class="input-icon">
                                                         <textarea class="form-control" id="description" name="description" placeholder="campus description" rows="5"></textarea>
                                                     </span>
                                                 </div>

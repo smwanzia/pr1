@@ -9,20 +9,41 @@ package business;
  *
  * @author xmore mmohz
  */
-public class Program_Intake {
+public class Program_Intake extends PersonalInformation {
     int user_id;
     String enddate;
     String startdate;
     String academicyear;
     String intakename;
+    String courseid;
+    String course_category;
     
     public Program_Intake(){
+         super();
+        course_category="";
+       courseid="";
         user_id=0;
         enddate="";
         startdate="";
         academicyear="";
         intakename="";
         
+    }
+
+    public String getCourse_category() {
+        return course_category;
+    }
+
+    public void setCourse_category(String course_category) {
+        this.course_category = course_category;
+    }
+
+    public String getCourseid() {
+        return courseid;
+    }
+
+    public void setCourseid(String courseid) {
+        this.courseid = courseid;
     }
 
     public int getUser_id() {

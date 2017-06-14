@@ -82,7 +82,7 @@
                                         </div>
 
                                         <div id="intake_div">
-                                            <form action="ProcessIntake" method="Post" >
+                                            <form action="ProcessIntake" method="Post" id="intake_form" >
                                                 <fieldset>
                                                     <legend>Select Program Intake</legend>
                                                     <div class="row">
@@ -91,13 +91,13 @@
                                                                 <label>
                                                                     Intake Name
                                                                 </label>
-                                                                <select class="form-control selected" id="intake_name" name="intakeName">
+                                                                <select class="form-control selected" id="intake_name"  name="intakeName">
                                                                     <option></option>
                                                                 <c:forEach var="result" items="${intake.rows}">
                                                                     <option value="${result.intake_id}">${result.intake_name}</option>
                                                                 </c:forEach>
                                                             </select>
-
+                                                                <div id="msg"></div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label>
@@ -220,5 +220,8 @@
         <script src="assets/js/form-validation.js"></script>
         <script src="js/jquery.dataTables.js"></script>
         <script src="js/App.js"></script>
+        
+     
+        
     </body>
 </html>

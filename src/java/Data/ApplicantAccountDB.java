@@ -157,7 +157,7 @@ public class ApplicantAccountDB {
 
     }
 
-    public static ApplicantAccount selectApplicantByUsername(String username){
+    public static ApplicantAccount selectApplicantByUsername(String username) {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
@@ -177,7 +177,53 @@ public class ApplicantAccountDB {
                 userAccount.setPassword(rs.getString("password"));
                 userAccount.setPhonenumber(rs.getString("phone_number"));
                 userAccount.setEmail(rs.getString("email_address"));
-                 }
+            }
+            return userAccount;
+        } catch (SQLException e) {  //catch sql exception 
+            e.printStackTrace();
+
+        } finally {//free connection 
+            DbUtil.closePreparedStatement(ps);
+            pool.freeConnection(connection);
+            DbUtil.closeResultSet(rs);
+
+        }
+        return null;
+    }
+
+    public static PersonalInformation selectApplicantByID(int user_id) {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String query = "SELECT * FROM credential c INNER JOIN personal_information p ON "
+                + "c.user_id=p.user_id HAVING user_id =?;";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, user_id);
+
+            rs = ps.executeQuery();
+           PersonalInformation userAccount = new PersonalInformation();
+            if (rs.next()) {
+                userAccount.setId(rs.getInt("user_id"));
+                userAccount.setUsername(rs.getString("user_name"));
+                userAccount.setLastname(rs.getString("last_name"));
+                userAccount.setFirstname(rs.getString("first_name"));
+                userAccount.setPassword(rs.getString("password"));
+                userAccount.setPhonenumber(rs.getString("phone_number"));
+                userAccount.setEmail(rs.getString("email_address"));
+                userAccount.setGender(rs.getString("gender"));
+                userAccount.setNationality(rs.getString("nationality"));
+                userAccount.setNationalId(rs.getString("national_Id"));
+                userAccount.setMaritalStatus(rs.getString("marital_status"));
+                userAccount.setReligion(rs.getString("religion"));
+                userAccount.setTown(rs.getString("town"));
+                userAccount.setCounty(rs.getString("county"));
+                userAccount.setDistrict(rs.getString("district"));
+                userAccount.setDOB(rs.getString("date_of_birth"));
+                userAccount.setContactAddress(rs.getString("contact_address"));
+
+            }
             return userAccount;
         } catch (SQLException e) {  //catch sql exception 
             e.printStackTrace();

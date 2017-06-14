@@ -40,6 +40,7 @@ public class SchoolDB {
         } finally {
             pool.freeConnection(connection);
             DbUtil.closePreparedStatement(ps);
+            DbUtil.closeStatement(ps);
         }
         return 0;
 

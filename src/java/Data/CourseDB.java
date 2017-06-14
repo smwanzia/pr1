@@ -20,7 +20,7 @@ import java.util.ArrayList;
  */
 public class CourseDB {
 
-    public static int AddCourses(Courses course) {
+    public static int AddCourses(Courses course, String duration) {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
@@ -30,8 +30,9 @@ public class CourseDB {
                 + "campus_id,"
                 + "course_name,"
                 + "category_id,"
-                + "course_description)"
-                + "VALUES(?,?,?,?,?,?)";
+                + "course_description,"
+                + "course_duration)"
+                + "VALUES(?,?,?,?,?,?,?)";
         try {
             ps = connection.prepareStatement(query);
             ps.setString(1, course.getDepartmentId());
@@ -40,6 +41,39 @@ public class CourseDB {
             ps.setString(4, course.getCoursename());
             ps.setString(5, course.getCategoryId());
             ps.setString(6, course.getDescription());
+            ps.setString(7, duration);
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DbUtil.closePreparedStatement(ps);
+            DbUtil.closeStatement(ps);
+            pool.freeConnection(connection);
+        }
+        return 0;
+    }
+  public static int UpdateCourses(Courses course, String duration) {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        String query = "UPDATE courses SET"
+                + "department_id =?,"
+                + "school_id =?,"
+                + "campus_id =?,"
+                + "course_name =?,"
+                + "category_id =?,"
+                + "course_description =?"
+                + "course_duration =?"
+                + "VALUES(?,?,?,?,?,?,?)";
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, course.getDepartmentId());
+            ps.setString(2, course.getSchoolId());
+            ps.setString(3, course.getCampusId());
+            ps.setString(4, course.getCoursename());
+            ps.setString(5, course.getCategoryId());
+            ps.setString(6, course.getDescription());
+            ps.setString(7, duration);
             return ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,14 +109,14 @@ public class CourseDB {
         return 0;
     }
 
-    public static int DeleteCourses(String course_id) {
+    public static int DeleteCourses(int course_id) {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         PreparedStatement ps = null;
         String query = "DELETE FROM courses WHERE id =?";
         try {
             ps = connection.prepareStatement(query);
-            ps.setString(1, course_id);
+            ps.setInt(1, course_id);
             return ps.executeUpdate();
 
         } catch (SQLException e) {
@@ -91,6 +125,7 @@ public class CourseDB {
         } finally {//free connection 
             DbUtil.closePreparedStatement(ps);
             pool.freeConnection(connection);
+            DbUtil.closeStatement(ps);
 
         }
     }
@@ -174,6 +209,34 @@ public class CourseDB {
 
             }
             return result;
+        } catch (SQLException e) {
+            DbUtil.closePreparedStatement(ps);
+            DbUtil.closeStatement(ps);
+            pool.freeConnection(connection);
+            DbUtil.closeResultSet(rs);
+        }
+        return null;
+
+    }
+
+    public static Courses SelectCourseByName(String coursename) {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        //ArrayList<Courses> result = new ArrayList<Courses>();
+        String url = "SELECT * FROM courses WHERE course_name =?";
+        try {
+            ps = connection.prepareStatement(url);
+            ps.setString(1, coursename);
+            rs = ps.executeQuery();
+            Courses course = new Courses();
+            if (rs.next()) {
+                course.setCourseId(rs.getString("id"));
+                course.setCoursename(rs.getString("course_name"));
+                //result.add(course);
+            }
+            return course;
         } catch (SQLException e) {
             DbUtil.closePreparedStatement(ps);
             DbUtil.closeStatement(ps);

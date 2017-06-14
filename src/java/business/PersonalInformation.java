@@ -10,9 +10,10 @@ package business;
  * @author xmore mmohz
  */
 public class PersonalInformation {
+
     private int id;
     private String nationality;
-private String firstname;
+    private String firstname;
     private String lastname;
     private String middlename;
     private String religion;
@@ -25,24 +26,66 @@ private String firstname;
     private String indexNo;
     private String district;
     private String maritalStatus;
-    
-    public PersonalInformation(){
-        id=0;
-        nationality="";
-        firstname="";
-        lastname="";
-        middlename="";
-        religion="";
-        nationalId="";
-        county="";
-        contactAddress="";
-        DOB="";
-        gender="";
-        town="";
-        indexNo="";
-        district="";
-        maritalStatus="";
-     }
+    private String email;
+    private String password;
+    private String username;
+    private String phonenumber;
+    // private String email;
+    // private String firstname;
+    // private String password;
+    // private String lastname;
+
+    public PersonalInformation() {
+
+        id = 0;
+        nationality = "";
+        firstname = "";
+        lastname = "";
+        middlename = "";
+        religion = "";
+        nationalId = "";
+        county = "";
+        contactAddress = "";
+        DOB = "";
+        gender = "";
+        town = "";
+        indexNo = "";
+        district = "";
+        maritalStatus = "";
+        email = "";
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPhonenumber() {
+        return phonenumber;
+    }
+
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
+    }
 
     public int getId() {
         return id;
@@ -163,7 +206,5 @@ private String firstname;
     public void setMaritalStatus(String maritalStatus) {
         this.maritalStatus = maritalStatus;
     }
-    
-    
 
 }

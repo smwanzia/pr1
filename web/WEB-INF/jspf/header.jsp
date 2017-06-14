@@ -53,7 +53,7 @@
                             </li>
                           
                             <li>
-                                <a href="ApplicantLogout">
+                                <a href="logout">
                                     Log Out
                                 </a>
                             </li>

@@ -18,10 +18,10 @@
 
     />
 <sql:query dataSource="${myDs}" var="courses">
-    SELECT id,department_name,school_name,course_name FROM courses c
-
+    SELECT id,department_name,school_name,course_name,category_id,course_description,course_duration FROM courses c
     JOIN  manage_department m_d ON c.department_id = m_d.department_id
     JOIN manage_schools m_s ON c.school_id = m_s.school_id
+
 
 </sql:query>
 <sql:query dataSource="${myDs}" var="school">
@@ -98,8 +98,6 @@
                                                     </a>
                                                 </div>
                                             </li>
-
-
                                         </ul>
                                         <!-- end: MINI STATS WITH SPARKLINE -->
                                     </div>
@@ -119,7 +117,7 @@
 
 
                                             <!--start delete button-->
-                                            <button id="delete_course" onclick="deleteCourses()" class="btn btn-danger btn-sm glyphicon glyphicon-trash"></button>
+                                            <!-- <button id="delete_course" onclick="deleteCourses()" class="btn btn-danger btn-sm glyphicon glyphicon-trash"></button>-->
                                         </ul>
                                     </div>
                                 </section>
@@ -130,8 +128,6 @@
                                     <table class="table table-striped table-bordered table-condensed table-hover table-full-width" id="course_info">
                                         <thead>
                                             <tr>
-                                                <th>##</th>
-                                                <th>Id</th>
                                                 <th>Course Name</th>
                                                 <th>Department</th>
                                                 <th>Schools/Faculties</th>
@@ -142,11 +138,12 @@
                                         <tbody>
                                         <c:forEach var="result" items="${courses.rows}">
                                             <tr>
-                                                <td><input type="checkbox" id="id_checkbox" name="course_id" value="${result.id}" class="checkbox delete_course clip-check check-lg check-primary checkbox-inline"/></td>
-                                                <td>${result.id}</td>
+                                                <td class="hidden">${result.id}</td>
                                                 <td><c:out value="${result.course_name}"/></td>
                                                 <td><c:out value="${result.department_name}"/></td>
                                                 <td><c:out value="${result.school_name}"/></td>
+                                                <td class="hidden"><c:out value="${result.course_description}"/></td>
+                                                <td class="hidden"><c:out value="${result.course_duration}"/></td>
                                                 <td><a href="#" class="edit-course" data-toggle="modal" data-target="#edit-item" >Edit</a></td>
                                                 <td><a href="#" class="remove-course" value="${result.id}">Delete</a></td>
                                             </tr>
@@ -171,7 +168,7 @@
                                                         Course Name
                                                     </label>
                                                     <span class="input-icon">
-                                                        <input type="text" class="form-control" id="id_coursename"  placeholder="unit name" name="coursename">
+                                                        <input type="text" class="form-control" id="course_id"  placeholder="unit name" name="coursename">
                                                     </span>
 
                                                 </div>
@@ -252,7 +249,7 @@
                                                     </label>
                                                     <div class="form-group">
                                                         <span class="input-icon">
-                                                            <select class="form-control cs-selected"  id="schoolid" name="schoolid">
+                                                            <select class="form-control cs-selected"  id="schoolid" name="duration">
                                                                 <option value="2">two years</option>
                                                                 <option value="3">Three years</option>
                                                                 <option value="4">four years</option>
@@ -265,33 +262,20 @@
                                         </div>
 
                                         <div class="row col-md-offset-0">
-                                            <div class="form-group">
-                                                <label>
-                                                    Course Description
-                                                </label>
+                                            <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <span class="input-icon">
-                                                        <textarea class="form-control" rows="5" name="description"  placeholder="Enter course description" id="course_description"></textarea>
-                                                    </span>
+                                                    <label>
+                                                        Course Description
+                                                    </label>
+                                                    <div class="form-group">
+                                                        <span class="input-icon">
+                                                            <textarea class="form-control" rows="5" name="description"  placeholder="Enter course description" id="course_description"></textarea>
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            <!--   <div class="col-md-6">
-                                                   <div class="form-group">
-                                                       <label>
-                                                           Course Description
-                                                       </label>
-                                                       <div class="form-group">
-                                                           <span class="input-icon">
-                                                               <textarea class="form-control" rows="5" name="description"  placeholder="Enter course description" id="course_description"></textarea>
-                                                           </span>
-                                                       </div>
-                                                   </div>
-                                               </div>-->
-
                                         </div>
-
-
                                         <div class="form-group">
                                             <div class="form-actions">
                                                 <button type="submit" id="Submit_courseInfo_button"  class="btn btn-sm btn-azure btn-wide glyphicon glyphicon-saved pull-right  btn-o" >Save</button>
@@ -496,8 +480,7 @@
                         </div>
                         <div class="modal-body">
                             <form action="" id="update_courses" method="POST">
-
-                                <input type="" name="id" class="edit-id">
+                                <input type="hidden" name="id" class="edit-id">
                                 <div class="row col-md-offset-0">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -517,111 +500,152 @@
                                             </label>
                                             <div class="form-group">
                                                 <span class="input-icon">
-                                                    <input type="text" class="form-control" id="id_coursetype"  placeholder="" name="coursetype">
-                                                    </div>
-                                                    </div>
-                                                    </div>
-                                                    </div>
-                                                    <div class="row col-md-offset-0">
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label>
-                                                                    School/Faculty
-                                                                </label>
-                                                                <span class="input-icon">
-                                                                    <input type="text" class="form-control" id="id_school"  placeholder="" name="school">
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label>
-                                                                    Department
-                                                                </label>
-                                                                <div class="form-group">
-                                                                    <span class="input-icon">
-                                                                        <input type="text" class="form-control" id="id_department"  placeholder="" name="department">
-                                                                        </div>
-                                                                        </div>
-                                                                        </div>
-                                                                        </div>
-                                                                        <div class="row col-md-offset-0">
-                                                                            <div class="col-md-6">
-                                                                                <div class="form-group">
-                                                                                    <label>
-                                                                                        Course Description
-                                                                                    </label>
-                                                                                    <span class="input-icon">
-                                                                                        <textarea class="form-control" id="id_description" name="description" rows="3"></textarea>
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-md-6">
-                                                                                <div class="form-group">
-                                                                                    <label>
-                                                                                        Course Duration
-                                                                                    </label>
-                                                                                    <div class="form-group">
-                                                                                        <span class="input-icon">
-                                                                                            <input type="text" class="form-control" id="id_department"  placeholder="" name="duration">
-                                                                                            </div>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                            </div>
-                                                                                            <div class="form-group">
-                                                                                                <button type="submit" class="btn btn-success .update_course_button">Submit</button>
-                                                                                            </div>
-                                                                                            </form>
+                                                    <select class="form-control cs-selected" id="course_type"  name="courseType">
+                                                        <option value="" disabled selected>bachelors,masters,diploma etc</option>
+                                                        <c:forEach var="items" items="${type.rows}">
+                                                            <option value="${items.category_id}">${items.category_name}</option>
+                                                        </c:forEach>
+                                                    </select></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row col-md-offset-0">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>
+                                                School/Faculty
+                                            </label>
+                                            <span class="input-icon">
+                                                <select class="form-control cs-selected"  id="schoolid" name="schoolid">
+                                                    <option value="" disabled selected>Select a faculty/school</option>
+                                                    <c:forEach var="items" items="${school.rows}">
+                                                        <option value="${items.school_id}">${items.school_name}</option>
+                                                    </c:forEach>
+                                                </select></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>
+                                                Department
+                                            </label>
+                                            <div class="form-group">
+                                                <span class="input-icon">
+                                                    <select class="form-control cs-selected" id="departmentid"  name="department" >
+                                                        <option value="" disabled selected>Select a department</option>
+                                                        <c:forEach var="items" items="${dept.rows}">
+                                                            <option value="${items.department_id}">${items.department_name}</option>
+                                                        </c:forEach>
+                                                    </select></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row col-md-offset-0">
+                                    <div class="col-md-6 ">
+                                        <div class="form-group">
+                                            <label>
+                                                Campus Name
+                                            </label>
+                                            <div class="form-group">
+                                                <span class="input-icon">
+                                                    <select class="form-control cs-selected js-example-placeholder-single js-states"  id="campusid" name="campusId">
+                                                        <option value="" disabled selected>Select a campus</option>
+                                                        <c:forEach var="items" items="${campus.rows}">
+                                                            <option value="${items.campus_id}">${items.campus_name}</option>
+                                                        </c:forEach>
+                                                    </select></span>
+                                            </div>
 
-                                                                                    </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>
+                                                Course Duration
+                                            </label>
+                                            <div class="form-group">
+                                                <span class="input-icon">
+                                                    <input type="text" class="form-control" id="id_duration"  placeholder="" name="duration">
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                                                                </div>
 
-                                                                            </div>
+                                </div>
+                                <div class="row col-md-offset-0">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>
+                                                Course Description
+                                            </label>
+                                            <span class="input-icon">
+                                                <textarea class="form-control" id="id_description" name="description" rows="3"></textarea>
+                                            </span>
+                                        </div>
+                                    </div>
 
-                                                                        </div>
-                                                                </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-success .update_course_button pull-right">Update</button>
+                                    </div>
+                                </div>
 
-                                                                <!-- start: MAIN JAVASCRIPTS -->
 
-                                                                <script src="js/jquery.min.js"></script>
+                            </form>
 
-                                                                <script src="js/bootstrap.min.js"></script>
-                                                                <script src="js/modernizr.js"></script>
-                                                                <script src="js/jquery.cookie.js"></script>
-                                                                <script src="js/perfect-scrollbar.min.js"></script>
-                                                                <script src="js/switchery.min.js"></script>
-                                                                <script src="js/selectFx.js"></script>
-                                                                <script src="js/classie.js"></script>
-                                                                <script src="js/jquery.validate.min.js"></script>
-                                                                <!-- end: MAIN JAVASCRIPTS -->
-                                                                <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
+                        </div>
 
-                                                                <script src="js/jquery.smartWizard.js"></script>
-                                                                <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
-                                                                <!-- start: CLIP-TWO JAVASCRIPTS -->
+                    </div>
 
-                                                                <script src="js/main.js"></script>
-                                                                <script src="js/form-wizard.js"></script>
-                                                                <script src="js/jquery.dataTables.js"></script>
-   <script src="js/bootbox.min.js"></script>
-                                                                <script src="js/App.js"></script>
+                </div>
 
-                                                                <script>
+            </div>
+        </div>
+
+        <!-- start: MAIN JAVASCRIPTS -->
+
+        <script src="js/jquery.min.js"></script>
+
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/modernizr.js"></script>
+        <script src="js/jquery.cookie.js"></script>
+        <script src="js/perfect-scrollbar.min.js"></script>
+        <script src="js/switchery.min.js"></script>
+        <script src="js/selectFx.js"></script>
+        <script src="js/classie.js"></script>
+        <script src="js/jquery.validate.min.js"></script>
+        <!-- end: MAIN JAVASCRIPTS -->
+        <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
+
+        <script src="js/jquery.smartWizard.js"></script>
+        <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
+        <!-- start: CLIP-TWO JAVASCRIPTS -->
+
+        <script src="js/main.js"></script>
+        <script src="js/form-wizard.js"></script>
+        <script src="js/jquery.dataTables.js"></script>
+        <script src="js/bootbox.min.js"></script>
+        <script src="js/App.js"></script>
+
+        <script>
                                                 jQuery(document).ready(function () {
                                                     Main.init();
                                                     FormWizard.init();
                                                 });
-                                                                </script>
-                                                                <script src="js/jquery.dataTables.min.js"></script>
-                                                                <script src="js/dataTables.tableTools.js"></script>
+        </script>
+        <script src="js/jquery.dataTables.min.js"></script>
+        <script src="js/dataTables.tableTools.js"></script>
 
 
 
-                                                                </body>
-                                                                </html>
+    </body>
+</html>
 
-                                                                <script>
+<script>
                                                 $(document).ready(function () {
                                                     $('#course_info').dataTable({
                                                         // "bJQueryUI":true,
@@ -643,54 +667,54 @@
                                                         }
                                                     });
                                                 });
-                                                                </script>
-                                                                <script>
-                                                                    $(document).ready(function () {
-                                                                        $('#fee_table').dataTable({
-                                                                            // "bJQueryUI":true,
-                                                                            "pageLength": 5,
-                                                                            "aLengthMenu": [[5, 10, 15, 20, -1], [5, 10, 15, 20, "All"]],
-                                                                            "order": [[1, 'desc'], [2, 'asc']],
-                                                                            "sDom": 'T<"clear">lfrtip',
-                                                                            "tableTools": {
-                                                                                "sSwfPath": "media/swf/copy_csv_xls_pdf.swf",
-                                                                                "aButtons": [
-                                                                                    "print",
-                                                                                    {
-                                                                                        "sExtends": "collection",
-                                                                                        "sButtonText": "Save",
-                                                                                        "aButtons": ["csv", "xls", "pdf"]
+</script>
+<script>
+    $(document).ready(function () {
+        $('#fee_table').dataTable({
+            // "bJQueryUI":true,
+            "pageLength": 5,
+            "aLengthMenu": [[5, 10, 15, 20, -1], [5, 10, 15, 20, "All"]],
+            "order": [[1, 'desc'], [2, 'asc']],
+            "sDom": 'T<"clear">lfrtip',
+            "tableTools": {
+                "sSwfPath": "media/swf/copy_csv_xls_pdf.swf",
+                "aButtons": [
+                    "print",
+                    {
+                        "sExtends": "collection",
+                        "sButtonText": "Save",
+                        "aButtons": ["csv", "xls", "pdf"]
 
-                                                                                    }
-                                                                                ]
-                                                                            }
-                                                                        });
-                                                                    });
-
-
-                                                                </script>
+                    }
+                ]
+            }
+        });
+    });
 
 
-                                                                <script>
-                                                                    $(document).ready(function () {
-                                                                        $('#unit_table').dataTable({
-                                                                            // "bJQueryUI":true,
-                                                                            "pageLength": 10,
-                                                                            "aLengthMenu": [[10, 15, 20, -1], [10, 15, 20, "All"]],
-                                                                            "order": [[1, 'desc'], [2, 'asc']],
-                                                                            "sDom": 'T<"clear">lfrtip',
-                                                                            "tableTools": {
-                                                                                "sSwfPath": "media/swf/copy_csv_xls_pdf.swf",
-                                                                                "aButtons": [
-                                                                                    "print",
-                                                                                    {
-                                                                                        "sExtends": "collection",
-                                                                                        "sButtonText": "Save",
-                                                                                        "aButtons": ["csv", "xls", "pdf"]
+</script>
 
-                                                                                    }
-                                                                                ]
-                                                                            }
-                                                                        });
-                                                                    });
-                                                                </script>
+
+<script>
+    $(document).ready(function () {
+        $('#unit_table').dataTable({
+            // "bJQueryUI":true,
+            "pageLength": 10,
+            "aLengthMenu": [[10, 15, 20, -1], [10, 15, 20, "All"]],
+            "order": [[1, 'desc'], [2, 'asc']],
+            "sDom": 'T<"clear">lfrtip',
+            "tableTools": {
+                "sSwfPath": "media/swf/copy_csv_xls_pdf.swf",
+                "aButtons": [
+                    "print",
+                    {
+                        "sExtends": "collection",
+                        "sButtonText": "Save",
+                        "aButtons": ["csv", "xls", "pdf"]
+
+                    }
+                ]
+            }
+        });
+    });
+</script>

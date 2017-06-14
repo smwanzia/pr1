@@ -136,6 +136,18 @@
         <servlet-name>Select_PhD_Courses</servlet-name>
         <servlet-class>controler.Select_PhD_Courses</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AjaxSelectIntake</servlet-name>
+        <servlet-class>controler.AjaxSelectIntake</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateCourses</servlet-name>
+        <servlet-class>controler.UpdateCourses</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AjaxSelectApplicants</servlet-name>
+        <servlet-class>controler.AjaxSelectApplicants</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>addUser</servlet-name>
         <url-pattern>/addUser</url-pattern>
@@ -276,6 +288,18 @@
     <servlet-mapping>
         <servlet-name>Select_PhD_Courses</servlet-name>
         <url-pattern>/Select_PhD_Courses</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AjaxSelectIntake</servlet-name>
+        <url-pattern>/AjaxSelectIntake</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateCourses</servlet-name>
+        <url-pattern>/UpdateCourses</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AjaxSelectApplicants</servlet-name>
+        <url-pattern>/AjaxSelectApplicants</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

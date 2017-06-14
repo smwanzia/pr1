@@ -8,6 +8,7 @@ package controler;
 import Data.ApplicantAccountDB;
 import Util.Encrypt;
 import business.ApplicantAccount;
+import business.PersonalInformation;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -31,7 +32,7 @@ public class login extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String hashedpassword = Encrypt.encryptSHA1(password);
-
+        PersonalInformation information;
         ApplicantAccount account = new ApplicantAccount();
         account = ApplicantAccountDB.selectApplicantByUsername(username);
 
@@ -51,13 +52,15 @@ public class login extends HttpServlet {
                 message = "<h4 style='color:darkred'>Login Authentication Failure</h4>"
                         + "<p><h5>You entered wrong credentials. Go Back and try again.</h5></p>";
                 session.setAttribute("Msg", message);
-                session.setAttribute("loggedInUser",account);
+                session.setAttribute("loggedInUser", account);
 
             } else {
+                information = ApplicantAccountDB.selectApplicantByID(account.getId());
                 url = "index.jsp";
-                message="welcome" +account.getUsername()+ "";
-                session.setAttribute("msg",message);
-                session.setAttribute("loggedInUser",account);
+                message = "welcome" + account.getUsername() + "";
+                session.setAttribute("msg", message);
+                session.setAttribute("loggedInUser", account);
+                session.setAttribute("UserAccount", information);
             }
 
         }
@@ -66,7 +69,7 @@ public class login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doPost(request,response);
+        doPost(request, response);
     }
 
 }

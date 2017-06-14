@@ -20,22 +20,24 @@ import javax.servlet.http.HttpSession;
  * @author xmore mmohz
  */
 public class CreateCourses extends HttpServlet {
-
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
         HttpSession session = request.getSession();
-
+        
         String coursename = request.getParameter("coursename");
         String schoolId = request.getParameter("schoolid");
         String campusId = request.getParameter("campusid");
         String categoryId = request.getParameter("courseType");
         String departmentId = request.getParameter("department");
         String description = request.getParameter("description");
-
+        String duration = request.getParameter("duration");
+        
         Courses course = new Courses();
-
+        Courses storedcourses;
+        
         course.setCampusId(campusId);
         course.setCategoryId(categoryId);
         course.setDepartmentId(departmentId);
@@ -46,27 +48,35 @@ public class CreateCourses extends HttpServlet {
             response.getWriter().write("validate all");
             response.setContentType("text/html");
             response.setCharacterEncoding("UTF-8");
-
+            
         } else {
             //sent to db
-            int i = CourseDB.AddCourses(course);
-            if (i == 1) {
+            storedcourses = CourseDB.SelectCourseByName(coursename);
+            if (storedcourses.getCoursename().matches(coursename)) {
                 response.setContentType("text/html");
                 response.setCharacterEncoding("UTF-8");
-                response.getWriter().write("success");
+                response.getWriter().write("duplicate");
             } else {
-                response.setContentType("text/html");
-                response.setCharacterEncoding("UTF-8");
-                response.getWriter().write("Error");
+                int i = CourseDB.AddCourses(course, duration);
+                if (i == 1) {
+                    response.setContentType("text/html");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write("success");
+                } else {
+                    response.setContentType("text/html");
+                    response.setCharacterEncoding("UTF-8");
+                    response.getWriter().write("Error");
+                }
             }
+            
         }
-
+        
     }
-
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        
     }
-
+    
 }

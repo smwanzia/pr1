@@ -5,24 +5,25 @@
  */
 package Data;
 
-
 import business.ApplicantAccount;
 import business.Courses;
 import business.EducationBackground;
 import business.PersonalInformation;
+import business.Program_Intake;
 import business.Sponsor;
 import business.WorkingExperience;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
  * @author xmore mmohz
  */
 public class ApplicationDB {
-
-
+    
     public static int AddSponsorDetails(Sponsor sponsor) {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
@@ -41,10 +42,10 @@ public class ApplicationDB {
             ps.setString(2, sponsor.getAddress());
             ps.setString(3, sponsor.getPhoneNumber());
             ps.setString(4, sponsor.getTown());
-            ps.setString(5,sponsor.getName());
-            ps.setString(6,sponsor.getFax());
+            ps.setString(5, sponsor.getName());
+            ps.setString(6, sponsor.getFax());
             return ps.executeUpdate();
-
+            
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -54,7 +55,7 @@ public class ApplicationDB {
         }
         return 0;
     }
-
+    
     public static int AddEducation_Info(EducationBackground info) {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
@@ -81,9 +82,9 @@ public class ApplicationDB {
             ps.setString(7, info.getIndexNo());
             ps.setString(8, info.getNameOfCerticate());
             ps.setString(9, info.getPhysicalChallenge());
-
+            
             return ps.executeUpdate();
-
+            
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -93,7 +94,7 @@ public class ApplicationDB {
         }
         return 0;
     }
-
+    
     public static int AddWorkingExperience(WorkingExperience work) {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
@@ -105,7 +106,7 @@ public class ApplicationDB {
                 + "organization_name,"
                 + "post_held)"
                 + "VALUES(?,?,?,?,?)";
-
+        
         try {
             ps = connection.prepareStatement(query);
             ps.setInt(1, work.getUserId());
@@ -113,9 +114,9 @@ public class ApplicationDB {
             ps.setString(3, work.getDate_from());
             ps.setString(4, work.getOrganizationName());
             ps.setString(5, work.getPostHeld());
-
+            
             return ps.executeUpdate();
-
+            
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -125,7 +126,7 @@ public class ApplicationDB {
         }
         return 0;
     }
-
+    
     public static int AddPersonal_Info(PersonalInformation account) {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
@@ -144,7 +145,7 @@ public class ApplicationDB {
                 + "date_of_birth,"
                 + "contact_address)"
                 + "VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
-
+        
         try {
             ps = connection.prepareStatement(query);
             ps.setInt(1, account.getId());
@@ -159,9 +160,9 @@ public class ApplicationDB {
             ps.setString(10, account.getDistrict());
             ps.setString(11, account.getDOB());
             ps.setString(12, account.getContactAddress());
-
+            
             return ps.executeUpdate();
-
+            
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -171,7 +172,7 @@ public class ApplicationDB {
         }
         return 0;
     }
-
+    
     public static int AddCourseSelected(Courses course) {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
@@ -185,9 +186,9 @@ public class ApplicationDB {
                 + "VALUES(?,?,?,?,?,?)";
         try {
             ps = connection.prepareStatement(query);
-
+            
             return ps.executeUpdate();
-
+            
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -197,5 +198,38 @@ public class ApplicationDB {
         }
         return 0;
     }
-
+    
+    public static ArrayList<Program_Intake> SelectAllApplicants() {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ArrayList<Program_Intake> result = new ArrayList<Program_Intake>();
+        String url = "SELECT first_name,last_name,course_name,intake_name,category_Name FROM course_applied cd INNER JOIN  courses c ON cd.course_id=c.id\n"
+                + "INNER JOIN credential L ON  L.user_id=cd.user_id \n"
+                + "INNER JOIN intake i ON i.intake_id=cd.intake_id\n"
+                + "INNER JOIN course_categories ct ON ct.category_id=c.category_id";
+        try {
+            ps = connection.prepareStatement(url);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Program_Intake intake = new Program_Intake();
+                intake.setUser_id(rs.getInt("user_id"));
+                intake.setFirstname(rs.getString("first_name"));
+                intake.setLastname(rs.getString("last_name"));
+                intake.setCourseid(rs.getString("course_name"));
+                intake.setCourse_category(rs.getString("category_name"));
+                intake.setIntakename(rs.getString("intake_name"));
+                result.add(intake);
+            }
+            return result;
+        } catch (SQLException e) {
+            DbUtil.closePreparedStatement(ps);
+            DbUtil.closeStatement(ps);
+            pool.freeConnection(connection);
+            DbUtil.closeResultSet(rs);
+        }
+        return null;
+        
+    }
 }

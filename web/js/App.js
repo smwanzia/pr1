@@ -95,7 +95,7 @@ $("#bachelor_Programmes").click(function () {
                     //rowNew.children().eq(0).text(value['']);
                     rowNew.children().eq(0).text(value['coursename']);
                     rowNew.children().eq(1).text(value['schoolId']);
-                    rowNew.append("<a class='btn btn-success btn-sm' href='Process_Course?courseId="+value.courseId+"'>Apply</a>");
+                    rowNew.append("<a class='btn btn-success btn-sm' href='Process_Course?courseId=" + value.courseId + "'>Apply</a>");
                     rowNew.appendTo(table1);
                 });
                 // $("#All_courses_div").hide();
@@ -121,7 +121,7 @@ $("#PhD_Programmes").click(function () {
         url: "Select_Masters_Courses",
         dataType: "json",
         success: function (responseJson) {
-            if(responseJson != null) {
+            if (responseJson != null) {
                 $("#Display_courses_table").find("tr:gt(0)").remove();
                 var table1 = $("#Display_courses_table");
                 $.each(responseJson, function (key, values) {
@@ -151,7 +151,7 @@ $("#Masters_Programmes").click(function () {
         url: "Select_Masters_Courses",
         dataType: "json",
         success: function (responseJson) {
-            if(responseJson != null) {
+            if (responseJson != null) {
                 $("#Display_courses_table").find("tr:gt(0)").remove();
                 var table1 = $("#Display_courses_table");
                 $.each(responseJson, function (key, values) {
@@ -181,7 +181,7 @@ $("#Certificate_Programmes").click(function () {
         url: "Select_Diploma_Courses",
         dataType: "json",
         success: function (responseJson) {
-            if(responseJson != null) {
+            if (responseJson != null) {
                 $("#Display_courses_table").find("tr:gt(0)").remove();
                 var table1 = $("#Display_courses_table");
                 $.each(responseJson, function (key, values) {
@@ -432,7 +432,7 @@ function fetchUsersAccount() {
                     rowNew.children().eq(3).text(value['roles']);
                     rowNew.children().eq(4).text(value['phone_number']);
                     rowNew.children().eq(5).text(value['email_address']);
-                    rowNew.append("<a href='#' " + value.userId + "'  id='remove_user' onclick='deleteUserAccount()' class='btn btn-warning btn-sm'>Delete</a>");
+                    rowNew.append("<a href='#' " + value.userId + "'id='remove_user_account' class='glyphicon glyphicon-trash'>Delete</a>");
                     rowNew.appendTo(table1);
                 });
             }
@@ -530,9 +530,9 @@ $("#save_user_button").click(function () {
 });
 /* Remove Item */
 
-$("body").on("click", "#remove_user_account", function () {
-
+$("body").on("click", "#remove_user_account", function(){
     var id = $(this).parent("td").data('id');
+   // alert(id);
     var c_obj = $(this).parents("tr");
     $.ajax({
         dataType: 'json',
@@ -542,9 +542,10 @@ $("body").on("click", "#remove_user_account", function () {
     }).done(function (data) {
         c_obj.remove();
         toastr.success('Item Deleted Successfully.', 'Success Alert', {timeOut: 5000});
-        getPageData();
+        //getPageData();
     });
 });
+
 function deleteUserAccount() {
     if (confirm("Are you sure you want to delete this?")) {
         var id = [];
@@ -707,46 +708,73 @@ function manageSchools() {
 
 
 
-
-function AddSchoolDetails() {
-//get form data
-    // validateSchoolForm()
-    var campusId = $("#camp_id").val();
-    var school_id = $("#school_id").val();
-    var schoolname = $("#school_name").val();
-    var desc = $("#description").val();
-    if (campusId != "" || school_id != '' || desc != '' || schoolname != '') {
-        $.ajax({
-            method: "POST",
-            URL: "AddSchools",
-            data: {
-                "school_id": school_id,
-                "campus_id": campusId,
-                "description": desc,
-                "schoolname": schoolname
-
+$("#submit_faculty_button").click(function () {
+    //validate the form before submiting data
+    $("#faculty_form").validate({
+        rules: {
+            campusId: {
+                required: true
             },
-            success: function (data) {
-                if (data == "success") {
-                    $("#showDiv").html("<div class='bs-example-modal-sm alert alert-success'><a href='#' class='close'\n\
+            schoolId: {
+                required: true
+            },
+            schoolName: {
+                required: true
+            },
+            description: {
+                required: true
+            },
+        },
+        messages: {
+            campusId: {
+                required: "please enter course name",
+            },
+            schoolName: {
+                required: "please  select campus id ",
+            },
+        },
+        submitHandler: function (form) {
+            $.ajax({
+                method: "POST",
+                url: "AddSchools",
+                data: $(form).serialize(),
+                success: function (data) {
+
+                    if (data == "success") {
+                        $("#showDiv").html("<div class='bs-example-modal-sm alert alert-success'><a href='#' class='close'\n\
                     data-dismiss='alert' onclick='closeMsgBox'>&times</a>\n\
-                <strong>Success! Data Successfully Added..</strong> </div>");
-                    $("#school_table").show();
-                } else {
-                    $("#showDiv").html("<div class='bs-example-modal-sm alert alert-danger'><a href='#' class='close'\n\
+                <strong>Success! Data Successfully Added..</strong> </div>").fadeOut('slow');
+                        // $("#displayDiv").fadeOut('slow');
+
+                        $("#school_table").show();
+                        $("#school_form_div").hide();
+                        //show course table
+
+                    } else if (data == "validate all") {
+                        alert("Error: please fill all field");
+                    }
+
+                    else {
+                        $("#showDiv").html("<div class='bs-example-modal-sm alert alert-danger'><a href='#' class='close'\n\
                     data-dismiss='alert' onclick='closeMsgBox'>&times</a>\n\
                 <strong>Error! Occured while updating database..please contact system admin</strong> </div>");
+                        $("#school_form_div").show();
+                        $("#school_id").val("");
+                        $("#school_name").val("");
+                    }
+                },
+                error: function (jqhr, status, error_thrown) {
+                    alert("The following error occured: status=" + status, "error_thrown=" + error_thrown);
                 }
-            },
-            error: function (jqhr, status, error_thrown) {
-                alert("The following error occured: status=" + status, "error_thrown=" + error_thrown);
-            }
-        });
-    } else {
-        alert("all field are required");
-    }
+            });
+        }
 
-}
+    });
+});
+
+
+
+
 //write a function on click to display form and save data to database
 
 function OnClickSchoolBtn() {
@@ -1015,17 +1043,22 @@ function OnclickaddCourseBtn() {
 
 //on update coursess
 $("body").on("click", ".edit-course", function () {
-    var id = $(this).parent("td").data('id');
-    var coursename = $(this).parent("td").prev("td").text();
-    var department = $(this).parent("td").prev("td").prev("td").text();
-    var schoolname = $(this).parent("td").prev("td").text();
+    var id = $(this).parent("td").prev("td").prev("td").prev("td").prev("td").prev("td").prev("td").text();
+    var coursename = $(this).parent("td").prev("td").prev("td").prev("td").prev("td").prev("td").text();
+    var department = $(this).parent("td").prev("td").prev("td").prev("td").prev("td").text();
+    var schoolname = $(this).parent("td").prev("td").prev("td").prev("td").text();
+    var description = $(this).parent("td").prev("td").prev("td").text();
     var duration = $(this).parent("td").prev("td").text();
-    var description = $(this).parent("td").prev("td").prev("td").prev("td").text();
+    var coursetype = $(this).parent("td").prev("td").text();
+
+
     $("#edit-item").find("input[name='coursename']").val(coursename);
     $("#edit-item").find("textarea[name='description']").val(description);
     $("#edit-item").find("input[name='school']").val(schoolname);
     $("#edit-item").find("input[name='department']").val(department);
     $("#edit-item").find("input[name='id']").val(id);
+    $("#edit-item").find("input[name='duration']").val(duration);
+    $("#edit-item").find("input[name='courseType']").val(coursetype);
 });
 /* Updated courses */
 
@@ -1037,18 +1070,39 @@ $(".update_course_button").click(function (e) {
     var courseType = $("#edit-item").find("input[name='coursetype']");
     var department = $("#edit-item").find("input[name='department']");
     var duration = $("#edit-item").find("input[name='duration']");
-    var school = $("#edit-item").find("input[name='school']");
+    var schoolid = $("#edit-item").find("input[name='school']");
+    var campus = $("#edit-item").find("input[name='school']");
     var id = $("#edit-item").find(".edit-id").val();
     if (courseName != '' || description != '' || department != '' || duration != '') {
         $.ajax({
-            dataType: 'json',
-            type: 'POST',
+            //dataType: 'json',
+            method: 'POST',
             url: 'UpdateCourses',
-            data: {courseName: courseName, description: description, id: id}
+            data: {
+                coursename: courseName,
+                description: description,
+                id: id,
+                schoolid: schoolid,
+                courseType: courseType,
+                duration: duration,
+                department: department,
+                campusid: campus
+            }
         }).done(function (data) {
-            getPageData();
+            if (data == "success") {
+                $("#displayDiv").html("<div class='bs-example-modal-sm alert alert-success'><a href='#' class='close\n\
+                    ' data-dismiss='alert' onclick='closeMsgBox'>$times;</a>\n\
+                       <strong>Success!Data was successfully deleted</strong></div>").fadeOut(4000);
+                $("#course-table").show();
+                c_obj.remove();
+            } else {
+                $("#displayDiv").html("<div class='bs-example-modal-sm alert alert-danger'><a href='#' class='close'\n\
+                    data-dismiss='alert' onclick='closeMsgBox'>&times</a>\n\
+                <strong>Error! Occured while updating database..please contact system admin</strong> </div>").fadeOut(4000);
+            }
+            // getPageData();
             $(".modal").modal('hide');
-            toastr.success('Item Updated Successfully.', 'Success Alert', {timeOut: 5000});
+            // toastr.success('Item Updated Successfully.', 'Success Alert', {timeOut: 5000});
         });
     } else {
         alert('You are missing title or description.');
@@ -1057,33 +1111,46 @@ $(".update_course_button").click(function (e) {
 /* Remove Item */
 
 $("body").on("click", ".remove-course", function () {
-
-    //var id = $(this).parent("td").data('id');
-    var id = $(this).data("id");
+//var id = $(this).parent("td").data('id');
+    var id = $(this).text();
+    // var id = $(this).data("id");
+    alert(id);
     var c_obj = $(this).parents("tr");
     bootbox.confirm("Are you sure want to delete this ", function (result) {
         if (result == true) {
             $.ajax({
-                dataType: 'json',
+                //dataType: 'json',
                 type: 'POST',
-                url: url + 'api/delete.php',
+                url: 'deleteCourses',
                 data: {id: id}
             }).done(function (data) {
-                c_obj.remove();
-                toastr.success('Item Deleted Successfully.', 'Success Alert', {timeOut: 5000});
+                if (data == "success") {
+                    $("#displayDiv").html("<div class='bs-example-modal-sm alert alert-success'><a href='#' class='close\n\
+                    ' data-dismiss='alert' onclick='closeMsgBox'>$times;</a>\n\
+                       <strong>Success!Data was successfully deleted</strong></div>").fadeOut(4000);
+                    $("#course-table").show();
+                    c_obj.remove();
+                } else {
+                    $("#displayDiv").html("<div class='bs-example-modal-sm alert alert-danger'><a href='#' class='close'\n\
+                    data-dismiss='alert' onclick='closeMsgBox'>&times</a>\n\
+                <strong>Error! Occured while updating database..please contact system admin</strong> </div>").fadeOut(4000);
+                }
+                //toastr.success('Item Deleted Successfully.', 'Success Alert', {timeOut: 5000});
             });
         } else {
             return false;
         }
     });
 });
+
+
+
 //a function to delete courses
 function deleteCourses() {
-
     if (confirm("Are you sure you want to delete this?")) {
-
         var id = [];
         $(":checkbox:checked").each(function () {
+            // id[i] = $(this).val();
             id.push($(this).val()); //get an array of id and loop them
         });
         if (id.length === 0) {
@@ -1093,21 +1160,25 @@ function deleteCourses() {
             $.ajax({
                 method: "POST",
                 url: "deleteCourses",
+                // data: {
+                //id: id
+
+                //},
                 data: "id=" + JSON.stringify(id),
                 success: function (result) {
                     if (result == "success") {
                         $("#displayDiv").html("<div class='bs-example-modal-sm alert alert-success'><a href='#' class='close\n\
                     ' data-dismiss='alert' onclick='closeMsgBox'>$times;</a>\n\
-                       <strong>Success!Data was successfully deleted</strong></div>").fadeOut('slow');
+                       <strong>Success!Data was successfully deleted</strong></div>").fadeOut(4000);
                         $("#course-table").show();
                         for (var i = 0; i < id.length; i++) {
                             $('tr#' + id[i] + '').css('background-color', '#ccc');
                             $('tr#' + id[i] + '').fadeOut('slow');
                         }
                     } else {
-                        $("#displayDiv").html("<div class='bs-example-modal-sm alert alert-danger'><a href='#' class='close\n\
-                    ' data-dismiss='alert' onclick='closeMsgBox'>$times;</a>\n\
-                       <strong>Error!Occure while updating database,Contact System Administrator</strong></div>").fadeOut('slow');
+                        $("#displayDiv").html("<div class='bs-example-modal-sm alert alert-danger'><a href='#' class='close'\n\
+                    data-dismiss='alert' onclick='closeMsgBox'>&times</a>\n\
+                <strong>Error! Occured while updating database..please contact system admin</strong> </div>").fadeOut(4000);
                     }
 
                 },
@@ -1168,12 +1239,17 @@ $("#Submit_courseInfo_button").click(function () {
                     if (data == "success") {
                         $("#displayDiv").html("<div class='bs-example-modal-sm alert alert-success'><a href='#' class='close'\n\
                     data-dismiss='alert' onclick='closeMsgBox'>&times</a>\n\
-                <strong>Success! Data Successfully Added..</strong> </div>").fadeOut('slow');
+                <strong>Success! Data Successfully Added..</strong> </div>").fadeOut(4000);
                         // $("#displayDiv").fadeOut('slow');
 
                         $("#course-table").show();
                         $("#course-form").hide();
                         //show course table
+                        //clear form input
+                        $("#departmentid").val("");
+                        $("#course_type").val();
+                        $("#campusid").val("");
+                        $("#course_id").val("");
 
                     } else if (data == "validate all") {
                         alert("Error: please fill all field");
@@ -1183,6 +1259,11 @@ $("#Submit_courseInfo_button").click(function () {
                         $("#displayDiv").html("<div class='bs-example-modal-sm alert alert-danger'><a href='#' class='close'\n\
                     data-dismiss='alert' onclick='closeMsgBox'>&times</a>\n\
                 <strong>Error! Occured while updating database..please contact system admin</strong> </div>");
+                        //clear form input
+                        $("#departmentid").val("");
+                        $("#course_type").val();
+                        $("#campusid").val("");
+                        $("#course_id").val("");
                     }
                 },
                 error: function (jqhr, status, error_thrown) {
@@ -1296,3 +1377,25 @@ $("#submit_courseUnit_button").click(function () {
  * 
  * End Managing course units
  */
+
+/*
+ * populate confirm course form 
+ */
+$('#intake_name').change(function () {
+    var intakename = $('#intake_name  option:selected').text();
+    // $('#accnumerr2').html("");
+    // $('#accnumerr3').html("");
+    // $('#dweek').val("");
+    // $('#dmonth').val("");
+    if (intakename == "") {
+        $('#msg').html("<h style='color:red'>Please select intake </h>");
+    } else if (intakename != "") {
+        $('#msg').html("");
+        $.post('AjaxSelectIntake', {intakeId: intakename}, function (data) {
+            $('#academic_year').val(data.academicyear);
+            $('#startdate').val(data.startdate);
+            $('#enddate').val(data.enddate)
+        });
+    }
+
+});
